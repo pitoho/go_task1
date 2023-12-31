@@ -192,8 +192,9 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 				log.Printf("Ошибка при разборе JSON:", err)
 				return
 			}
+			log.Print("Данные приняты с Nats сервера")
 
-			//sendDataToDB(result, string(msg.Data))
+			sendDataToDB(result, string(msg.Data))
 
 		}()
 
@@ -201,6 +202,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Print("Данные отправлены на Nats сервер")
 	}
 }
 
@@ -219,7 +221,7 @@ func sendDataToDB(requestData RequestData, json_data string) error{
 
 	query1 := `
 
-	INSERT INTO delivery (name, phone, zip, city, address, region, email) VALUES ($1, $2, $3, $4, $5, $6, $7);
+		INSERT INTO delivery (name, phone, zip, city, address, region, email) VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 	`
 	query2 := `
